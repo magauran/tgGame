@@ -1,0 +1,4 @@
+module CNIOOpenSSL {
+    umbrella "/Users/Alexey/Desktop/Projects/tgGame/.build/checkouts/swift-nio-ssl.git--5879202857757408108/Sources/CNIOOpenSSL/include"
+    export *
+}
