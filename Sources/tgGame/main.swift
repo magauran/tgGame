@@ -1,7 +1,7 @@
 import Foundation
 import Telegrammer
 
-guard let token = Enviroment.get(Tokens.telegram) else { exit(1) }
+let token = Tokens.telegram
 var settings = Bot.Settings(token: token)
 let bot = try! Bot(settings: settings)
 
@@ -36,18 +36,12 @@ func echoResponse(_ update: Update, _ context: BotContext?) throws {
 }
 
 do {
-    ///Dispatcher - handle all incoming messages
     let dispatcher = Dispatcher(bot: bot)
-    
-    ///Creating and adding handler for command /echo
-    let commandHandler = CommandHandler(commands: ["/echo"], callback: echoModeSwitch)
+    let mainController = MainController(bot: bot)
+
+    let commandHandler = CommandHandler(commands: ["/start"], callback: mainController.start)
     dispatcher.add(handler: commandHandler)
-    
-    ///Creating and adding handler for ordinary text messages
-    let echoHandler = MessageHandler(filters: Filters.text, callback: echoResponse)
-    dispatcher.add(handler: echoHandler)
-	
-    ///Longpolling updates
+
     _ = try Updater(bot: bot, dispatcher: dispatcher).startLongpolling().wait()
     
 } catch {
