@@ -11,11 +11,18 @@ import NIO
 
 class MainController {
 
+    enum Button: String {
+        case join = "Присоединиться"
+        case settings = "Настройки"
+    }
+
     private let bot: Bot
 
     init(bot: Bot) {
         self.bot = bot
     }
+
+    // MARK: - Handler callbacks
 
     func start(_ update: Update, _ context: BotContext?) throws {
         guard
@@ -30,11 +37,28 @@ class MainController {
         let _ = try bot.sendMessage(params: params).and(self.showMenu(chatId))
     }
 
-    func showMenu(_ chatId: ChatId) -> Future<Message> {
-        let keyboardButtons = [[KeyboardButton(text: "Локации")],
-                               [KeyboardButton(text: "Настройки")]]
+    func keyboard(_ update: Update, _ context: BotContext?) throws {
+        guard
+            let message = update.message,
+            let text = message.text,
+            let button = Button(rawValue: text)
+            else { return }
+
+        let chatId: ChatId = .chat(message.chat.id)
+
+        let params = Bot.SendMessageParams(chatId: chatId,
+                                           text: "Ты нажал на кнопку \"\(button.rawValue)\"",
+                                           parseMode: .markdown)
+        let _ = try bot.sendMessage(params: params)
+    }
+
+    // MARK: - Private methods
+
+    private func showMenu(_ chatId: ChatId) -> Future<Message> {
+        let keyboardButtons = [[KeyboardButton(text: Button.join.rawValue)],
+                               [KeyboardButton(text: Button.settings.rawValue)]]
         let keyboardMarkup = ReplyKeyboardMarkup(keyboard: keyboardButtons, resizeKeyboard: false, oneTimeKeyboard: true, selective: false)
-        let params = Bot.SendMessageParams(chatId: chatId, text: "Для начала игры выбери локацию", parseMode: .markdown,  replyMarkup: .replyKeyboardMarkup(keyboardMarkup))
+        let params = Bot.SendMessageParams(chatId: chatId, text: "Недалеко началась драка", parseMode: .markdown,  replyMarkup: .replyKeyboardMarkup(keyboardMarkup))
         return try! bot.sendMessage(params: params)
     }
 

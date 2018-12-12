@@ -58,40 +58,9 @@ final class GameBot: ServiceType {
         let commandHandler = CommandHandler(commands: ["/start"], callback: mainController.start)
         dispatcher.add(handler: commandHandler)
 
-        ///Creating and adding handler for ordinary text messages
-        let echoHandler = MessageHandler(filters: Filters.text, callback: echoResponse)
-        dispatcher.add(handler: echoHandler)
+        let keyboardHandler = MessageHandler(name: "Keyboard", filters: Filters.text, callback: mainController.keyboard)
+        dispatcher.add(handler: keyboardHandler)
         
         return dispatcher
-    }
-}
-
-extension GameBot {
-    ///Callback for Command handler, which send Echo mode status for user
-    func echoModeSwitch(_ update: Update, _ context: BotContext?) throws {
-        guard let message = update.message,
-            let user = message.from else { return }
-        
-        var onText = ""
-        if let on = userEchoModes[user.id] {
-            onText = on ? "OFF" : "ON"
-            userEchoModes[user.id] = !on
-        } else {
-            onText = "ON"
-            userEchoModes[user.id] = true
-        }
-        
-        let params = Bot.SendMessageParams(chatId: .chat(message.chat.id), text: "Echo mode turned \(onText)")
-        try bot.sendMessage(params: params)
-    }
-    
-    ///Callback for Message handler, which send echo message to user
-    func echoResponse(_ update: Update, _ context: BotContext?) throws {
-        guard let message = update.message,
-            let user = message.from,
-            let on = userEchoModes[user.id],
-            on == true else { return }
-        let params = Bot.SendMessageParams(chatId: .chat(message.chat.id), text: message.text!)
-        try bot.sendMessage(params: params)
     }
 }
