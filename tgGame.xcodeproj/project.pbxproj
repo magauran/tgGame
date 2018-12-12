@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8AA583E421C17DA2009D805E /* Fighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA583E321C17DA2009D805E /* Fighter.swift */; };
+		8AA583EA21C17F9B009D805E /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA583E921C17F9B009D805E /* Action.swift */; };
+		8AA583EC21C1849F009D805E /* ActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA583EB21C1849F009D805E /* ActionType.swift */; };
 		OBJ_1000 /* Byte+Alphabet.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_737 /* Byte+Alphabet.swift */; };
 		OBJ_1001 /* Byte+Control.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_738 /* Byte+Control.swift */; };
 		OBJ_1002 /* Byte+Digit.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_739 /* Byte+Digit.swift */; };
@@ -3900,6 +3903,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8AA583E321C17DA2009D805E /* Fighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fighter.swift; sourceTree = "<group>"; };
+		8AA583E921C17F9B009D805E /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		8AA583EB21C1849F009D805E /* ActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionType.swift; sourceTree = "<group>"; };
 		"Console::Command::Product" /* Command.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Command.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Console::Console::Product" /* Console.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Console.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Console::Logging::Product" /* Logging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Logging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5370,6 +5376,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8AA583E521C17EA0009D805E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8AA583E321C17DA2009D805E /* Fighter.swift */,
+				8AA583E921C17F9B009D805E /* Action.swift */,
+				8AA583EB21C1849F009D805E /* ActionType.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8AA583E621C17EA7009D805E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_10 /* MainController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		8AA583E721C17F17009D805E /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_12 /* app.swift */,
+				OBJ_13 /* boot.swift */,
+				OBJ_14 /* configure.swift */,
+				OBJ_15 /* main.swift */,
+				OBJ_16 /* routes.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		8AA583E821C17F45009D805E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_9 /* GameBot.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		OBJ_103 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -6417,7 +6461,7 @@
 			path = Middleware;
 			sourceTree = "<group>";
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -6426,7 +6470,6 @@
 				OBJ_18 /* Dependencies */,
 				OBJ_909 /* Products */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_517 /* Storage */ = {
@@ -7226,14 +7269,11 @@
 		OBJ_8 /* tgGame */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_9 /* GameBot.swift */,
-				OBJ_10 /* MainController.swift */,
+				8AA583E721C17F17009D805E /* Application */,
+				8AA583E821C17F45009D805E /* Services */,
+				8AA583E521C17EA0009D805E /* Models */,
+				8AA583E621C17EA7009D805E /* Controllers */,
 				OBJ_11 /* Tokens.swift */,
-				OBJ_12 /* app.swift */,
-				OBJ_13 /* boot.swift */,
-				OBJ_14 /* configure.swift */,
-				OBJ_15 /* main.swift */,
-				OBJ_16 /* routes.swift */,
 			);
 			name = tgGame;
 			path = Sources/tgGame;
@@ -8989,7 +9029,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_909 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -10169,13 +10209,16 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_957 /* Async+NIO.swift in Sources */,
+				8AA583E421C17DA2009D805E /* Fighter.swift in Sources */,
 				OBJ_958 /* AsyncError.swift in Sources */,
 				OBJ_959 /* Collection+Future.swift in Sources */,
 				OBJ_960 /* Deprecated.swift in Sources */,
 				OBJ_961 /* Exports.swift in Sources */,
 				OBJ_962 /* Future+DoCatch.swift in Sources */,
+				8AA583EC21C1849F009D805E /* ActionType.swift in Sources */,
 				OBJ_963 /* Future+Flatten.swift in Sources */,
 				OBJ_964 /* Future+Global.swift in Sources */,
+				8AA583EA21C17F9B009D805E /* Action.swift in Sources */,
 				OBJ_965 /* Future+Map.swift in Sources */,
 				OBJ_966 /* Future+Transform.swift in Sources */,
 				OBJ_967 /* Future+Variadic.swift in Sources */,
