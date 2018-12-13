@@ -45,6 +45,7 @@ class FightController {
         RedisService.shared.subscribe { (response) in
             if let responces = response {
                 for resp in responces {
+                    
                     let params = Bot.SendMessageParams(chatId: chatId,
                                                        text: resp.localizedDescription,
                                                        parseMode: .markdown)
@@ -107,7 +108,7 @@ class FightController {
             try mainController.start(update, context)
         case .fighters:
             let fighters = Battlefield.shared.fighters.map { $0 }
-            let names = fighters.map { $0.value.username }.joined(separator: "\n")
+            let names = fighters.map { "\($0.value.username) - \($0.value.health)" }.joined(separator: "\n")
             let params = Bot.SendMessageParams(chatId: chatId,
                                                text: "В данный момент дерутся:\n\(names)",
                                                parseMode: .markdown)

@@ -21,7 +21,7 @@ extension ActionType {
         case .hit:
             return "ударил"
         case .dodge:
-            return "уклонился"
+            return "увернулся"
         case .join:
             return "присоединился"
         case .escape:

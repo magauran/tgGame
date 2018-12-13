@@ -48,11 +48,17 @@ class RedisService {
     func subscribe(_ completion: @escaping ([ActionResponse]?) -> Void) {
         _ = self.subscriber.do({ (client) in
             let _ = try! client.subscribe([self.outputChannel], subscriptionHandler: { (redisChannelData) in
-                do {
-                    print(redisChannelData.data.string)
-                    let responses = try JSONDecoder().decode([ActionResponse].self, from: redisChannelData.data.data!)
+                let jsonDecoder = JSONDecoder()
+                let data = redisChannelData.data.data!
+                print(redisChannelData.data.string!)
+                if let responses = try? JSONDecoder().decode([ActionResponse].self, from: data) {
                     completion(responses.count == 0 ? nil : responses)
-                } catch {
+                } else if let dictionary = try? jsonDecoder.decode([String: Int].self, from: data) {
+                    if dictionary.count == 0 { completion(nil) }
+                    for (key, health) in dictionary {
+                        var fighter = Battlefield.shared.fighters[key]
+                        Battlefield.shared.fighters[key]?.health = health
+                    }
                     completion(nil)
                 }
             })
