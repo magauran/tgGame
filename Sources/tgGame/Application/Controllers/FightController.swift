@@ -41,12 +41,7 @@ class FightController {
         RedisService.shared.subscribe { (response) in
             if let responces = response {
                 for resp in responces {
-                    for (_ , fighter) in Battlefield.shared.fighters {
-                        let params = Bot.SendMessageParams(chatId: .chat(Int64(fighter.chatId)),
-                                                           text: resp.localizedDescription,
-                                                           parseMode: .markdown)
-                        let _ = try! self.bot.sendMessage(params: params)
-                    }
+                    self.sendMessageToAll(text: resp.localizedDescription)
                 }
             }
         }
@@ -75,41 +70,27 @@ class FightController {
 
         switch button {
         case .hit:
-            let params = Bot.SendMessageParams(chatId: chatId,
-                                               text: "Удар",
-                parseMode: .markdown)
-            let _ = try! self.bot.sendMessage(params: params)
+            sendMessage(chatId: chatId, text: "Удар")
 
             let fighter = Fighter(name: "\(user.id)", username: user.firstName, chatId: Int(message.chat.id))
             let action = Action(fighter: fighter, actionType: ActionType.hit, target: nil)
             guard let actionJson = action.json else { return }
             RedisService.shared.publish(json: actionJson)
         case .dodge:
-            let params = Bot.SendMessageParams(chatId: chatId,
-                                               text: "Уворот",
-                parseMode: .markdown)
-            let _ = try! self.bot.sendMessage(params: params)
-
+            sendMessage(chatId: chatId, text: "Уворот")
             let fighter = Fighter(name: "\(user.id)", username: user.firstName, chatId: Int(message.chat.id))
             let action = Action(fighter: fighter, actionType: ActionType.dodge, target: nil)
             guard let actionJson = action.json else { return }
             RedisService.shared.publish(json: actionJson)
         case .escape:
-            let params = Bot.SendMessageParams(chatId: chatId,
-                                               text: "Ты успешно сбежал",
-                                               parseMode: .markdown)
-            let _ = try! self.bot.sendMessage(params: params)
+            sendMessageToAll(text: "\(user.firstName) сбежал, теряя зубы")
             RedisService.shared.unsubscribe()
             let mainController = MainController(bot: bot)
-            //gameBot?.dispatcher?.remove(handler: keyboardHandler, from: .zero)
             try mainController.start(update, context)
         case .fighters:
             let fighters = Battlefield.shared.fighters.map { $0 }
             let names = fighters.map { "\($0.value.username) - \($0.value.health)" }.joined(separator: "\n")
-            let params = Bot.SendMessageParams(chatId: chatId,
-                                               text: "В данный момент дерутся:\n\(names)",
-                                               parseMode: .markdown)
-            let _ = try! self.bot.sendMessage(params: params)
+            sendMessage(chatId: chatId, text: "В замесе:\n\(names)")
         }
     }
 
@@ -124,6 +105,19 @@ class FightController {
         let keyboardMarkup = ReplyKeyboardMarkup(keyboard: keyboardButtons, resizeKeyboard: false, oneTimeKeyboard: true, selective: false)
         let params = Bot.SendMessageParams(chatId: chatId, text: "Выбери действие", parseMode: .markdown,  replyMarkup: .replyKeyboardMarkup(keyboardMarkup))
         return try! bot.sendMessage(params: params)
+    }
+
+    private func sendMessageToAll(text: String) {
+        for (_ , fighter) in Battlefield.shared.fighters {
+            sendMessage(chatId: .chat(Int64(fighter.chatId)), text: text)
+        }
+    }
+
+    private func sendMessage(chatId: ChatId, text: String) {
+        let params = Bot.SendMessageParams(chatId: chatId,
+                                           text: text,
+                                      parseMode: .markdown)
+        let _ = try! self.bot.sendMessage(params: params)
     }
 
 }
