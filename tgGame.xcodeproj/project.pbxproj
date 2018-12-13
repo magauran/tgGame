@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		8A4A372C21C1E76000383FFE /* FightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4A372A21C1E60600383FFE /* FightController.swift */; };
 		8AA58A3C21C1AF0E009D805E /* RedisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA58A3A21C1ACA2009D805E /* RedisService.swift */; };
+		8AF22A2321C24FEE00888099 /* ActionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF22A2121C24F9200888099 /* ActionResponse.swift */; };
+		8AF22A2621C2584C00888099 /* Battlefield.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF22A2421C2580E00888099 /* Battlefield.swift */; };
 		OBJ_1000 /* Future+Void.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_806 /* Future+Void.swift */; };
 		OBJ_1001 /* FutureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_807 /* FutureType.swift */; };
 		OBJ_1002 /* QueueHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_808 /* QueueHandler.swift */; };
@@ -4051,6 +4053,8 @@
 /* Begin PBXFileReference section */
 		8A4A372A21C1E60600383FFE /* FightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FightController.swift; sourceTree = "<group>"; };
 		8AA58A3A21C1ACA2009D805E /* RedisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedisService.swift; sourceTree = "<group>"; };
+		8AF22A2121C24F9200888099 /* ActionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionResponse.swift; sourceTree = "<group>"; };
+		8AF22A2421C2580E00888099 /* Battlefield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Battlefield.swift; sourceTree = "<group>"; };
 		"Console::Command::Product" /* Command.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Command.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Console::Console::Product" /* Console.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Console.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Console::Logging::Product" /* Logging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Logging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5616,7 +5620,9 @@
 			children = (
 				OBJ_13 /* Action.swift */,
 				OBJ_14 /* ActionType.swift */,
+				8AF22A2121C24F9200888099 /* ActionResponse.swift */,
 				OBJ_15 /* Fighter.swift */,
+				8AF22A2421C2580E00888099 /* Battlefield.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -10554,9 +10560,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				8AF22A2321C24FEE00888099 /* ActionResponse.swift in Sources */,
 				OBJ_2814 /* MainController.swift in Sources */,
 				8A4A372C21C1E76000383FFE /* FightController.swift in Sources */,
 				OBJ_2815 /* Action.swift in Sources */,
+				8AF22A2621C2584C00888099 /* Battlefield.swift in Sources */,
 				OBJ_2816 /* ActionType.swift in Sources */,
 				OBJ_2817 /* Fighter.swift in Sources */,
 				OBJ_2818 /* GameBot.swift in Sources */,

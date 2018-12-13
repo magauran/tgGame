@@ -1,6 +1,6 @@
 //
 //  RedisService.swift
-//  Async
+//  tgGame
 //
 //  Created by Алексей on 12/12/2018.
 //
@@ -45,20 +45,23 @@ class RedisService {
         _subscriber = nil
     }
 
-    func subscribe(_ completion: @escaping (String) -> Void) {
+    func subscribe(_ completion: @escaping ([ActionResponse]?) -> Void) {
         _ = self.subscriber.do({ (client) in
             let _ = try! client.subscribe([self.outputChannel], subscriptionHandler: { (redisChannelData) in
-                var str = redisChannelData.data.string ?? "Что-то пошло не так"
-                if str == "[]" { str = "upd" }
-                print(str)
-                completion(str)
+                do {
+                    print(redisChannelData.data.string)
+                    let responses = try JSONDecoder().decode([ActionResponse].self, from: redisChannelData.data.data!)
+                    completion(responses.count == 0 ? nil : responses)
+                } catch {
+                    completion(nil)
+                }
             })
         })
     }
 
-    func publish() {
+    func publish(json: String) {
         _ = self.publisher.do( { client in
-            let publishData = RedisData.bulkString("{\"nick\": \"blabla\", \"action\": 2, \"target\": \"blabla\"}")
+            let publishData = RedisData.bulkString(json)
             _ = client.publish(publishData, to: self.inputChannel)
         })
     }
