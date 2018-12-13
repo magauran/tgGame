@@ -13,9 +13,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/givip/Telegrammer.git", from: "0.4.0"),
-	.package(url: "https://github.com/vapor/vapor.git", from: "3.0.0")
+        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
+        .package(url: "https://github.com/vapor/redis.git", from: "3.0.0"),
+        .package(url: "https://github.com/vapor/database-kit.git", from: "1.0.0")
         ],
     targets: [
-        .target( name: "tgGame", dependencies: ["Vapor", "Telegrammer"])
+        .target( name: "tgGame", dependencies: ["Vapor", "Telegrammer", "Redis", "DatabaseKit"])
         ]
 )

@@ -8,6 +8,7 @@
 import Foundation
 import Telegrammer
 import NIO
+import Redis
 
 class MainController {
 
@@ -49,7 +50,19 @@ class MainController {
         let params = Bot.SendMessageParams(chatId: chatId,
                                            text: "Ты нажал на кнопку \"\(button.rawValue)\"",
                                            parseMode: .markdown)
-        let _ = try bot.sendMessage(params: params)
+        if button == .settings {
+            RedisService.shared.subscribe { (response) in
+                let params = Bot.SendMessageParams(chatId: chatId,
+                                                   text: response,
+                                                   parseMode: .markdown)
+                let _ = try! self.bot.sendMessage(params: params)//.and(self.showMenu(chatId))
+            }
+        } else {
+            //let publishFuture =
+                RedisService.shared.publish()
+            //let _ = try! self.bot.sendMessage(params: params)
+        }
+
     }
 
     // MARK: - Private methods

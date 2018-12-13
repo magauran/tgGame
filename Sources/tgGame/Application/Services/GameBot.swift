@@ -8,6 +8,7 @@
 import Foundation
 import Telegrammer
 import Vapor
+import Redis
 
 final class GameBot: ServiceType {
     
@@ -20,7 +21,7 @@ final class GameBot: ServiceType {
     
     ///Conformance to `ServiceType` protocol, fabric methhod
     static func makeService(for worker: Container) throws -> GameBot {
-        let token = Tokens.telegram
+        let token = Secret.Token.telegram
 
         let settings = Bot.Settings(token: token, debugMode: true)
     
@@ -36,7 +37,7 @@ final class GameBot: ServiceType {
         
         /// If you are using self-signed certificate, point it's filename
         // settings.webhooksPublicCert = "public.pem"
-        
+
         return try GameBot(settings: settings)
     }
     

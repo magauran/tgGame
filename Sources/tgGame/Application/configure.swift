@@ -1,4 +1,6 @@
 import Vapor
+import Redis
+import DatabaseKit
 
 /// Called before your application initializes.
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
@@ -18,4 +20,15 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     let router = EngineRouter.default()
     try routes(router)
     services.register(router, as: Router.self)
+
+    /// Registering Redis
+    try services.register(RedisProvider())
+
+    var databases = DatabasesConfig()
+    databases.add(database: RedisDatabase.self, as: .redis)
+    services.register(databases)
+
+    /// MemoryKeyedCache
+    config.prefer(MemoryKeyedCache.self, for: KeyedCache.self)
+
 }
