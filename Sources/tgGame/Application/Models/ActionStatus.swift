@@ -38,7 +38,7 @@ extension ActionStatus {
         case .watched:
             return " и наблюдает"
         case .died:
-            return " и умер"
+            return ", который умер"
         }
     }
 }

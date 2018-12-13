@@ -20,7 +20,15 @@ extension ActionResponse: Decodable { }
 extension ActionResponse {
     var localizedDescription: String {
         if let fighter = Battlefield.shared.fighters[nick] {
-            return "\(fighter.username) \(action.localizedDescription)\(action_status.localizedDescription)"
+            var targetStr = ""
+            if let targetId = target {
+                if let targetFighter = Battlefield.shared.fighters[targetId] {
+                    targetStr = " \(targetFighter.username)"
+                } else {
+                    targetStr = " \(targetId)"
+                }
+            }
+            return "\(fighter.username) \(action.localizedDescription)\(targetStr)\(action_status.localizedDescription)"
         }
         return "\(nick) \(action.localizedDescription)"
     }
