@@ -53,11 +53,16 @@ final class GameBot: ServiceType {
     func configureDispatcher() throws -> Dispatcher {
         ///Dispatcher - handle all incoming messages
         let dispatcher = Dispatcher(bot: bot)
-        let mainController = MainController(bot: bot, gameBot: self)
+        let mainController = MainController(bot: bot)
 
         ///Creating and adding handler for command /start
         let commandHandler = CommandHandler(commands: ["/start"], callback: mainController.start)
         dispatcher.add(handler: commandHandler)
+
+        let main = MainController(bot: bot)
+        let fight = FightController(bot: bot)
+        dispatcher.add(handler: main.keyboardHandler, to: HandlerGroup.init(id: 10, name: "main"))
+        dispatcher.add(handler: fight.keyboardHandler, to: HandlerGroup.init(id: 11, name: "fight"))
         
         return dispatcher
     }

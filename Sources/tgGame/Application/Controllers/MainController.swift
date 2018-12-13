@@ -18,23 +18,19 @@ class MainController {
     }
 
     private let bot: Bot
-    private weak var gameBot: GameBot?
-    private lazy var keyboardHandler: MessageHandler = {
+    lazy var keyboardHandler: MessageHandler = {
         return MessageHandler(name: "Keyboard",
                               filters: Filters.text,
                               callback: self.keyboard)
     }()
 
-    init(bot: Bot, gameBot: GameBot?) {
+    init(bot: Bot) {
         self.bot = bot
-        self.gameBot = gameBot
     }
 
     // MARK: - Handler callbacks
 
     func start(_ update: Update, _ context: BotContext?) throws {
-        gameBot?.dispatcher?.add(handler: keyboardHandler)
-
         guard
             let message = update.message,
             let user = message.from
@@ -56,8 +52,7 @@ class MainController {
 
         switch button {
         case .join:
-            let fightController = FightController(bot: bot, gameBot: gameBot)
-            gameBot?.dispatcher?.remove(handler: keyboardHandler, from: .zero)
+            let fightController = FightController(bot: bot)
             try fightController.start(update, context)
         case .settings:
             break

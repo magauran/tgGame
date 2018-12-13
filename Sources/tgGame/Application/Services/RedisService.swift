@@ -56,7 +56,6 @@ class RedisService {
                 } else if let dictionary = try? jsonDecoder.decode([String: Int].self, from: data) {
                     if dictionary.count == 0 { completion(nil) }
                     for (key, health) in dictionary {
-                        var fighter = Battlefield.shared.fighters[key]
                         Battlefield.shared.fighters[key]?.health = health
                     }
                     completion(nil)

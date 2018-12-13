@@ -19,16 +19,14 @@ class FightController {
     }
 
     private let bot: Bot
-    private weak var gameBot: GameBot?
-    private lazy var keyboardHandler: MessageHandler = {
+    lazy var keyboardHandler: MessageHandler = {
         return MessageHandler(name: "Keyboard",
                               filters: Filters.text,
                               callback: self.keyboard)
     }()
 
-    init(bot: Bot, gameBot: GameBot?) {
+    init(bot: Bot) {
         self.bot = bot
-        self.gameBot = gameBot
     }
 
     // MARK: - Handler callbacks
@@ -40,16 +38,15 @@ class FightController {
             else { return }
         let chatId: ChatId = .chat(message.chat.id)
 
-        gameBot?.dispatcher?.add(handler: keyboardHandler)
-
         RedisService.shared.subscribe { (response) in
             if let responces = response {
                 for resp in responces {
-                    
-                    let params = Bot.SendMessageParams(chatId: chatId,
-                                                       text: resp.localizedDescription,
-                                                       parseMode: .markdown)
-                    let _ = try! self.bot.sendMessage(params: params)
+                    for (_ , fighter) in Battlefield.shared.fighters {
+                        let params = Bot.SendMessageParams(chatId: .chat(Int64(fighter.chatId)),
+                                                           text: resp.localizedDescription,
+                                                           parseMode: .markdown)
+                        let _ = try! self.bot.sendMessage(params: params)
+                    }
                 }
             }
         }
@@ -59,7 +56,7 @@ class FightController {
                                            parseMode: .markdown)
         let _ = try bot.sendMessage(params: params).and(self.showMenu(chatId))
 
-        let fighter = Fighter(name: "\(user.id)", username: user.firstName)
+        let fighter = Fighter(name: "\(user.id)", username: user.firstName, chatId: Int(message.chat.id))
         let action = Action(fighter: fighter, actionType: ActionType.join, target: nil)
         Battlefield.shared.fighters["\(user.id)"] = fighter
         guard let actionJson = action.json else { return }
@@ -83,7 +80,7 @@ class FightController {
                 parseMode: .markdown)
             let _ = try! self.bot.sendMessage(params: params)
 
-            let fighter = Fighter(name: "\(user.id)", username: user.firstName)
+            let fighter = Fighter(name: "\(user.id)", username: user.firstName, chatId: Int(message.chat.id))
             let action = Action(fighter: fighter, actionType: ActionType.hit, target: nil)
             guard let actionJson = action.json else { return }
             RedisService.shared.publish(json: actionJson)
@@ -93,7 +90,7 @@ class FightController {
                 parseMode: .markdown)
             let _ = try! self.bot.sendMessage(params: params)
 
-            let fighter = Fighter(name: "\(user.id)", username: user.firstName)
+            let fighter = Fighter(name: "\(user.id)", username: user.firstName, chatId: Int(message.chat.id))
             let action = Action(fighter: fighter, actionType: ActionType.dodge, target: nil)
             guard let actionJson = action.json else { return }
             RedisService.shared.publish(json: actionJson)
@@ -103,8 +100,8 @@ class FightController {
                                                parseMode: .markdown)
             let _ = try! self.bot.sendMessage(params: params)
             RedisService.shared.unsubscribe()
-            let mainController = MainController(bot: bot, gameBot: gameBot)
-            gameBot?.dispatcher?.remove(handler: keyboardHandler, from: .zero)
+            let mainController = MainController(bot: bot)
+            //gameBot?.dispatcher?.remove(handler: keyboardHandler, from: .zero)
             try mainController.start(update, context)
         case .fighters:
             let fighters = Battlefield.shared.fighters.map { $0 }
