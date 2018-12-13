@@ -18,14 +18,23 @@ class MainController {
     }
 
     private let bot: Bot
+    private weak var gameBot: GameBot?
+    private lazy var keyboardHandler: MessageHandler = {
+        return MessageHandler(name: "Keyboard",
+                              filters: Filters.text,
+                              callback: self.keyboard)
+    }()
 
-    init(bot: Bot) {
+    init(bot: Bot, gameBot: GameBot?) {
         self.bot = bot
+        self.gameBot = gameBot
     }
 
     // MARK: - Handler callbacks
 
     func start(_ update: Update, _ context: BotContext?) throws {
+        gameBot?.dispatcher?.add(handler: keyboardHandler)
+
         guard
             let message = update.message,
             let user = message.from
@@ -45,22 +54,13 @@ class MainController {
             let button = Button(rawValue: text)
             else { return }
 
-        let chatId: ChatId = .chat(message.chat.id)
-
-        let params = Bot.SendMessageParams(chatId: chatId,
-                                           text: "Ты нажал на кнопку \"\(button.rawValue)\"",
-                                           parseMode: .markdown)
-        if button == .settings {
-            RedisService.shared.subscribe { (response) in
-                let params = Bot.SendMessageParams(chatId: chatId,
-                                                   text: response,
-                                                   parseMode: .markdown)
-                let _ = try! self.bot.sendMessage(params: params)//.and(self.showMenu(chatId))
-            }
-        } else {
-            //let publishFuture =
-                RedisService.shared.publish()
-            //let _ = try! self.bot.sendMessage(params: params)
+        switch button {
+        case .join:
+            let fightController = FightController(bot: bot, gameBot: gameBot)
+            gameBot?.dispatcher?.remove(handler: keyboardHandler, from: .zero)
+            try fightController.start(update, context)
+        case .settings:
+            break
         }
 
     }

@@ -53,14 +53,11 @@ final class GameBot: ServiceType {
     func configureDispatcher() throws -> Dispatcher {
         ///Dispatcher - handle all incoming messages
         let dispatcher = Dispatcher(bot: bot)
-        let mainController = MainController(bot: bot)
+        let mainController = MainController(bot: bot, gameBot: self)
 
         ///Creating and adding handler for command /start
         let commandHandler = CommandHandler(commands: ["/start"], callback: mainController.start)
         dispatcher.add(handler: commandHandler)
-
-        let keyboardHandler = MessageHandler(name: "Keyboard", filters: Filters.text, callback: mainController.keyboard)
-        dispatcher.add(handler: keyboardHandler)
         
         return dispatcher
     }

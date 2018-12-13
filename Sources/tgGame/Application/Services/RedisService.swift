@@ -20,40 +20,44 @@ class RedisService {
         return try! RedisDatabase(config: redisConfig)
     }()
 
-    private lazy var publisher: EventLoopFuture<RedisClient>? = {
-        let group1 = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-        return db.newConnection(on: group1)
-    }()
-
-    private var subscriberClient: RedisClient?
-
-    func connect() {
-        let group1 = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-        self.subscriberClient = try! self.db.newConnection(on: group1).wait()
+    private var _publisher: EventLoopFuture<RedisClient>?
+    private var publisher: EventLoopFuture<RedisClient> {
+        if (_publisher == nil) {
+            let group1 = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+            _publisher = db.newConnection(on: group1)
+        }
+        return _publisher!
     }
 
-    func close() {
-        self.subscriberClient!.close()
+    private var _subscriber: EventLoopFuture<RedisClient>?
+    private var subscriber: EventLoopFuture<RedisClient> {
+        if (_subscriber == nil) {
+            let group1 = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+            _subscriber = db.newConnection(on: group1)
+        }
+        return _subscriber!
+    }
+
+    func unsubscribe() {
+        _ = self.subscriber.do({ (client) in
+            client.close()
+        })
+        _subscriber = nil
     }
 
     func subscribe(_ completion: @escaping (String) -> Void) {
-
-        do {
-            let _ = try self.subscriberClient!.subscribe(["output"], subscriptionHandler: { redisChannelData in
+        _ = self.subscriber.do({ (client) in
+            let _ = try! client.subscribe([self.outputChannel], subscriptionHandler: { (redisChannelData) in
                 var str = redisChannelData.data.string ?? "Что-то пошло не так"
                 if str == "[]" { str = "upd" }
                 print(str)
                 completion(str)
             })
-
-        } catch {
-            print(error)
-        }
-
+        })
     }
 
     func publish() {
-        _ = self.publisher?.do( { client in
+        _ = self.publisher.do( { client in
             let publishData = RedisData.bulkString("{\"nick\": \"blabla\", \"action\": 2, \"target\": \"blabla\"}")
             _ = client.publish(publishData, to: self.inputChannel)
         })

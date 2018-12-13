@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A4A372C21C1E76000383FFE /* FightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4A372A21C1E60600383FFE /* FightController.swift */; };
 		8AA58A3C21C1AF0E009D805E /* RedisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA58A3A21C1ACA2009D805E /* RedisService.swift */; };
 		OBJ_1000 /* Future+Void.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_806 /* Future+Void.swift */; };
 		OBJ_1001 /* FutureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_807 /* FutureType.swift */; };
@@ -4048,6 +4049,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8A4A372A21C1E60600383FFE /* FightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FightController.swift; sourceTree = "<group>"; };
 		8AA58A3A21C1ACA2009D805E /* RedisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedisService.swift; sourceTree = "<group>"; };
 		"Console::Command::Product" /* Command.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Command.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Console::Console::Product" /* Console.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Console.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5566,6 +5568,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_11 /* MainController.swift */,
+				8A4A372A21C1E60600383FFE /* FightController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -10552,6 +10555,7 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_2814 /* MainController.swift in Sources */,
+				8A4A372C21C1E76000383FFE /* FightController.swift in Sources */,
 				OBJ_2815 /* Action.swift in Sources */,
 				OBJ_2816 /* ActionType.swift in Sources */,
 				OBJ_2817 /* Fighter.swift in Sources */,
